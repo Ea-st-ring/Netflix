@@ -26,14 +26,14 @@ const Navbar = styled.nav`
 const Logo = styled.img`
 position: fixed;
 left: 40px;
-width: 80px;
+width: 120px;
 object-fit: contain;
 `
 
 const Avatar = styled.img`
 position: fixed;
 right: 40px;
-width: 30px;
+width: 40px;
 object-fit: contain;
 
 `
@@ -56,7 +56,7 @@ const Nav = () => {
     },[]);
 
     return (
-        <Navbar className={show ? '' : 'black'}>
+        <Navbar className={show ? 'black' : ''}>
             <Logo 
             alt='Netflix logo' 
             src='https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/2880px-Netflix_2015_logo.svg.png'
