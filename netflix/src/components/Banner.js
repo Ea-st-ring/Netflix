@@ -4,6 +4,52 @@ import requests from '../api/requests';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+
+
+const Banner = () => {
+    
+    const [movie,setMovie] = useState([]);
+    useEffect(()=>{
+        fetchData();
+    },[]);
+
+    const fetchData = async () => {
+        const request = await api.get(requests.fetchNowPlaying);
+        console.log(request);
+        const movieId =
+        request.data.results[
+            Math.floor(Math.random()* request.data.results.length)
+        ].id;
+        
+        const {data: movieDetail} = await api.get(`movie/${movieId}`, {
+            params:{ append_to_response:"videos"},
+        });
+        setMovie(movieDetail);
+    };
+
+    const truncate = (str) => {
+        return str?.length > 100 ? str.substr(0, 99) + "..." : str;
+    };
+
+    return (
+        <Header style={{backgroundImage: `url("https://image.tmdb.org/t/p/original/${movie.backdrop_path}")`}}>
+            <Contents>
+            <Title>{movie.title || movie.name || movie.original_name}</Title>
+            <Buttons>
+                <PlayBtn>Play</PlayBtn>
+                <InfoBtn>More Information</InfoBtn>
+            </Buttons>
+            <Description>{truncate(movie.overview)}</Description>
+            </Contents>
+            <FadeBottom/>
+        </Header>
+    );
+};
+
+export default Banner;
+
+
+
 const Header = styled.header`
 background-position: top center;
 background-size: cover;
@@ -131,45 +177,3 @@ background-image: linear-gradient(
     #111
 );
 `
-
-const Banner = () => {
-    
-    const [movie,setMovie] = useState([]);
-    useEffect(()=>{
-        fetchData();
-    },[]);
-
-    const fetchData = async () => {
-        const request = await api.get(requests.fetchNowPlaying);
-        console.log(request);
-        const movieId =
-        request.data.results[
-            Math.floor(Math.random()* request.data.results.length)
-        ].id;
-        
-        const {data: movieDetail} = await api.get(`movie/${movieId}`, {
-            params:{ append_to_response:"videos"},
-        });
-        setMovie(movieDetail);
-    };
-
-    const truncate = (str) => {
-        return str?.length > 100 ? str.substr(0, 99) + "..." : str;
-    };
-
-    return (
-        <Header style={{backgroundImage: `url("https://image.tmdb.org/t/p/original/${movie.backdrop_path}")`}}>
-            <Contents>
-            <Title>{movie.title || movie.name || movie.original_name}</Title>
-            <Buttons>
-                <PlayBtn>Play</PlayBtn>
-                <InfoBtn>More Information</InfoBtn>
-            </Buttons>
-            <Description>{truncate(movie.overview)}</Description>
-            </Contents>
-            <FadeBottom/>
-        </Header>
-    );
-};
-
-export default Banner;
