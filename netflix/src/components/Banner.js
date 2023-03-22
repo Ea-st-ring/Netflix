@@ -9,6 +9,10 @@ import styled from 'styled-components';
 const Banner = () => {
     
     const [movie,setMovie] = useState([]);
+    const [isClicked,setIsClicked]=useState();
+    const iframe = document.createElement('iframe');
+    iframe.setAttribute('allow', 'fullscreen'); // must be 1st
+    iframe.setAttribute('allowFullScreen', '');
     useEffect(()=>{
         fetchData();
     },[]);
@@ -31,24 +35,77 @@ const Banner = () => {
         return str?.length > 100 ? str.substr(0, 99) + "..." : str;
     };
 
-    return (
-        <Header style={{backgroundImage: `url("https://image.tmdb.org/t/p/original/${movie.backdrop_path}")`}}>
-            <Contents>
-            <Title>{movie.title || movie.name || movie.original_name}</Title>
-            <Buttons>
-                <PlayBtn>Play</PlayBtn>
-                <InfoBtn>More Information</InfoBtn>
-            </Buttons>
-            <Description>{truncate(movie.overview)}</Description>
-            </Contents>
-            <FadeBottom/>
-        </Header>
-    );
+    if(!isClicked){
+        return (
+            <Header style={{backgroundImage: `url("https://image.tmdb.org/t/p/original/${movie.backdrop_path}")`}}>
+                <Contents>
+                <Title>{movie.title || movie.name || movie.original_name}</Title>
+                <Buttons>
+                    <PlayBtn
+                    onClick={()=> {movie.videos.results[0].key ? setIsClicked(true) : setIsClicked(false)}}
+                    >Play</PlayBtn>
+                    <InfoBtn>More Information</InfoBtn>
+                </Buttons>
+                <Description>{truncate(movie.overview)}</Description>
+                </Contents>
+                <FadeBottom/>
+            </Header>
+            );
+    }
+    else {
+        return(
+            <Container>
+                <HomeContainer>
+                    <IFrame
+                    src={`https://www.youtube.com/embed/${movie.videos.results[0].key}?controls=0&autoplay=1&loop=1&mute=1&playlist=${movie.videos.results[0].key}`}
+                    width="640"
+                    height='360'
+                    frameBorder="0"
+                    allow='autoplay; fullscreen'
+                    allowFullScreen
+                    >
+                    </IFrame>
+                </HomeContainer>
+            </Container>
+        )
+    }
+    
+    
 };
 
 export default Banner;
 
+const IFrame = styled.iframe`
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.95;
+    border: none;
 
+    &::after{
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        
+    }
+`
+
+const Container = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+`
+
+const HomeContainer = styled.div`
+    width: 100%;
+    height: 100%;
+`
 
 const Header = styled.header`
 background-position: top center;
