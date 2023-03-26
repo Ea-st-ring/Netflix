@@ -6,4 +6,5 @@ const size = {
 const theme = {
     mobile: `(max-width: ${size.mobile})`,
     desktop: `(min-width: ${size.desktop})`,
+    modal : `(max-height: ${size.mobile})`
 }
