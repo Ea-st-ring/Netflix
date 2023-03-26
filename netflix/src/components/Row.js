@@ -15,19 +15,21 @@ const Row = ({title,fetchUrl,isLargeRow,id}) => {
         console.log(request.data.results);
     }
 
-    const onClickArrow = useCallback((e,direction) => {
+    const onClickArrow = ((direction) => {
+        console.log(direction);
+        console.log(document.getElementById(id).scrollLeft);
         if(direction==='left'){
-            console.log(e.target);
+            document.getElementById(id).scrollLeft -= window.innerWidth - 160;
         } else{
-            console.log(e.target);
+            document.getElementById(id).scrollLeft += window.innerWidth - 160;
         }
-    },[]);
+    });
 
     return (
         <Section>
             <h2>{title}</h2>
-            <Slider>
-                <ArrowLeft onClick={onClickArrow}>
+            <Slider style={{height: isLargeRow ? '500px' : '170px'}}>
+                <ArrowLeft onClick={()=>{onClickArrow('left')}}>
                     <span>{"<"}</span>
                 </ArrowLeft>
             <Posters id={id}>
@@ -41,7 +43,7 @@ const Row = ({title,fetchUrl,isLargeRow,id}) => {
                     // TODO : 컴포넌트화하기
                 ))}
             </Posters>
-            <ArrowRight onClick={onClickArrow}>
+            <ArrowRight onClick={()=>{onClickArrow('right')}}>
                 <span>{">"}</span>
             </ArrowRight>
 
@@ -58,49 +60,86 @@ margin-left: 22px;
 display: flex;
 flex-direction: column;
 background-color: #000;
-
 `
 
 const Slider = styled.div`
 display: flex;
 align-items: center;
-overflow-x: scroll;
-&::-webkit-scrollbar {
-    display: none; /* 크롬, 사파리*/
-}
-
 `
 
 
 const ArrowLeft = styled.div`
-position: sticky;
+width: 50px;
+z-index: 100;
+position: absolute;
 left: 30px;
+height: inherit;
+display: flex;
+align-items: center;
+justify-content: space-around;
+transition: 100ms all ease-in;
 span {
 color: white;
 cursor: pointer;
-font-size: 36px;
+font-size: 46px;
+transition: 100ms all ease-in;
+} 
+&:hover{
+    background-color: #0000005F;
+}
+span:hover{
+    transform: scale(1.3);
 }
 `
 
 const ArrowRight = styled.div`
-position: sticky;
+width: 50px;
+z-index: 100;
+position: absolute;
 right: 30px;
-span{
+height: inherit;
+display: flex;
+align-items: center;
+justify-content: space-around;
+transition: 100ms all ease-in;
+span {
 color: white;
-font-size: 36px;
 cursor: pointer;
+font-size: 46px;
+transition: 100ms all ease-in;
+} 
+
+
+
+&:hover{
+    background-color: #0000005F;
+}
+
+span:hover{
+    transform: scale(1.3);
 }
 `
 
 const Posters = styled.div`
-
+overflow-x: scroll;
+overflow-y: hidden;
 display: flex;
-
-
-img{
-    width: 250px;
-    
+transition: 100ms all ease-in;
+margin: 0px 30px 0px 30px;
+&::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리*/
 }
+scroll-behavior: smooth;
+img{
+    border-radius: 5px;
+    width: 250px;
+    margin-right: 7px;
+    transition:100ms all ease-in;
+}
+img:hover{
+    transform: scale(1.1);
+}
+
 
 `
 
