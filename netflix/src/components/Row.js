@@ -1,13 +1,21 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import api from '../api/api';
 import styled from 'styled-components';
+import MovieModal from './MovieModal';
 
 const Row = ({title,fetchUrl,isLargeRow,id}) => {
     const [movies,setMovies] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [movieSelected, setMovieSelected] = useState({});
 
     useEffect(()=>{
         fetchMovieData();
     },[]);
+
+    const handleClick = (movie) => {
+        setModalOpen(true);
+        setMovieSelected(movie);
+    }
 
     const fetchMovieData = async () => {
         const request = await api.get(fetchUrl);
@@ -39,6 +47,7 @@ const Row = ({title,fetchUrl,isLargeRow,id}) => {
                     className={`row__poster ${isLargeRow && "row__posterLarge"}`}
                     src={`https://image.tmdb.org/t/p/original/${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
                     alt={movie.name}
+                    onClick={()=>handleClick(movie)}
                     />
                     // TODO : 컴포넌트화하기
                 ))}
@@ -48,6 +57,11 @@ const Row = ({title,fetchUrl,isLargeRow,id}) => {
             </ArrowRight>
 
             </Slider>
+
+            {modalOpen && <MovieModal
+            {...movieSelected} setModalOpen={setModalOpen}
+            />}
+
         </Section>
     );
 };
