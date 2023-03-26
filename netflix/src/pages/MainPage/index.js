@@ -1,7 +1,6 @@
 import React from 'react';
 import requests from '../../api/requests';
 import Banner from '../../components/Banner';
-import Footer from '../../components/Footer';
 import Row from '../../components/Row';
 const MainPage = () => {
     return (
