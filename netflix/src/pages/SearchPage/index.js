@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import api from '../../api/api';
+import { useDebounce } from '../../hooks/useDebounce';
 import "./SearchPage.css";
 const SearchPage = () => {
     const [searchResult, setSearchResult] = useState([]);
@@ -10,14 +11,15 @@ const SearchPage = () => {
     }
     let query = useQuery();
     const searchTerm = query.get("q");
-
+    const debouncedSearchTerm = useDebounce(searchTerm, 500);
     useEffect(()=>{
-        if(searchTerm) {
-            fetchSearchMovie(searchTerm);
+        if(debouncedSearchTerm) {
+            fetchSearchMovie(debouncedSearchTerm);
         }
-    },[searchTerm]);
+    },[debouncedSearchTerm]);
 
     const fetchSearchMovie = async (searchTerm) => {
+        console.log(searchTerm);
         try{
             const request = await api.get(
                 `/search/multi?query=${searchTerm}`
@@ -58,7 +60,7 @@ const SearchPage = () => {
             <section className='no-results'>
                 <div className='no-result__text'></div>
                 <p>
-                    찾고자하는 검색어 `{searchTerm}`에 맞는 영화가 없습니다.
+                    찾고자하는 검색어 `{debouncedSearchTerm}`에 맞는 영화가 없습니다.
                 </p>
             </section>
         )
