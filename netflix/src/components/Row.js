@@ -2,8 +2,19 @@ import React, { useCallback, useEffect, useState } from 'react';
 import api from '../api/api';
 import styled from 'styled-components';
 import MovieModal from './MovieModal';
+import SwiperCore, {Navigation,Pagination,Scrollbar,A11y} from 'swiper';
+import {Swiper,SwiperSlide} from 'swiper/react';
+import 'swiper/swiper.min.css'
+import 'swiper/components/navigation/navigation.min.css'
+import 'swiper/components/pagination/pagination.min.css';
+import 'swiper/components/scrollbar/scrollbar.min.css';
+
+import './Row.css';
+
 
 const Row = ({title,fetchUrl,isLargeRow,id}) => {
+
+    SwiperCore.use([Navigation]);
     const [movies,setMovies] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [movieSelected, setMovieSelected] = useState({});
@@ -36,28 +47,41 @@ const Row = ({title,fetchUrl,isLargeRow,id}) => {
     return (
         <Section>
             <h2>{title}</h2>
-            <Slider style={{height: isLargeRow ? '500px' : '170px'}}>
+            <Swiper
+            modules={[Navigation,Pagination,Scrollbar,A11y]}
+            spaceBetween={30}
+            slidesPerView={6}
+            navigation
+            pagination={{clickable:true}}
+            scrollbar={{draggable:true}}
+            onSwiper={(swiper)=>console.log(swiper)}
+            onSlideChange={()=> console.log('slide change')}
+            >
+            {/* <Slider style={{height: isLargeRow ? '500px' : '170px'}}>
                 <ArrowLeft onClick={()=>{onClickArrow('left')}}>
                     <span>{"<"}</span>
-                </ArrowLeft>
+                </ArrowLeft> */}
             <Posters id={id}>
                 {movies.map(movie => (
+                    <SwiperSlide>
                     <img
                     key={movie.id}
                     className={`row__poster ${isLargeRow && "row__posterLarge"}`}
                     src={`https://image.tmdb.org/t/p/original/${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
                     alt={movie.name}
                     onClick={()=>handleClick(movie)}
+
                     />
+                    </SwiperSlide>
                     // TODO : 컴포넌트화하기
                 ))}
             </Posters>
-            <ArrowRight onClick={()=>{onClickArrow('right')}}>
+            {/* <ArrowRight onClick={()=>{onClickArrow('right')}}>
                 <span>{">"}</span>
             </ArrowRight>
 
-            </Slider>
-
+            </Slider> */}
+            </Swiper>
             {modalOpen && <MovieModal
             {...movieSelected} setModalOpen={setModalOpen}
             />}
@@ -69,11 +93,12 @@ const Row = ({title,fetchUrl,isLargeRow,id}) => {
 const Section = styled.section`
 h2{
 color: white;
+background-color: #000;
 margin-left: 22px;
 }
-display: flex;
-flex-direction: column;
-background-color: #000;
+/* display: flex;
+flex-direction: column; */
+background-color: #000; 
 `
 
 const Slider = styled.div`
@@ -145,10 +170,16 @@ margin: 0px 30px 0px 30px;
 }
 scroll-behavior: smooth;
 img{
-    border-radius: 5px;
+    /* border-radius: 5px;
     width: 250px;
     margin-right: 7px;
-    transition:100ms all ease-in;
+    transition:100ms all ease-in; */
+    object-fit: contain;
+    width: 100%;
+    max-height: 144px;
+    margin-right: 10px;
+    transition: transform 450ms;
+    border-radius: 4px;
 }
 img:hover{
     transform: scale(1.1);
