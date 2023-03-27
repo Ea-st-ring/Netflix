@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
-
+import useOnClickOutside from '../../hooks/useOnClickOutside';
 const MovieModal = ({
     backdrop_path,
     title,
@@ -15,11 +15,13 @@ const MovieModal = ({
     const truncate = (str) => {
         return str?.length > 200 ? str.substr(0, 199) + "..." : str;
     };
+    const ref = useRef();
+    useOnClickOutside(ref,()=>{setModalOpen(false)}); // ref, handler
 
     return (
         <Presentation>
             <Wrapper>
-                <Modal>
+                <Modal ref={ref}>
                 <ModalClose onClick={()=> setModalOpen(false)}>
                         X
                     </ModalClose>
