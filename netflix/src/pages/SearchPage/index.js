@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../../api/api';
 import { useDebounce } from '../../hooks/useDebounce';
 import "./SearchPage.css";
 const SearchPage = () => {
     const [searchResult, setSearchResult] = useState([]);
-
+    const navigate = useNavigate();
     const useQuery = () => {
         return new URLSearchParams(useLocation().search);
     }
@@ -40,7 +40,9 @@ const SearchPage = () => {
                     "https://image.tmdb.org/t/p/w500" + movie.backdrop_path
                     return(
                     <div className='movie' id={movie.id}>
-                            <div className='movie__column-poster'>
+                            <div className='movie__column-poster'
+                            onClick={()=> navigate(`/${movie.id}`)}
+                            >
                                 <img
                                     src={movieImageUrl} alt='movie img'
                                     className='movie__poster'
