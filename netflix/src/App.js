@@ -19,7 +19,7 @@ const Layout = () => {
 
 function App() {
   return (
-    <div className="app" style={{overflowX : 'hidden'}}>
+    <div className="app" style={{overflowX : 'hidden', backgroundColor:'black'}}>
       <Routes>
         <Route path='/' element={<Layout/>}>
           <Route index element={<MainPage/>}/>
