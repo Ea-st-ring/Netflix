@@ -24,7 +24,7 @@ const Banner = () => {
         request.data.results[
             Math.floor(Math.random()* request.data.results.length)
         ].id;
-        
+
         const {data: movieDetail} = await api.get(`movie/${movieId}`, {
             params:{ append_to_response:"videos"},
         });
@@ -117,12 +117,16 @@ height: 448px;
     position: relative;
     height: 600px;
 }
+
+/* 모니터 768px~ */
+
 `
 const Title = styled.h1`
 font-size: 3rem;
 font-weight: 800;
 padding-bottom: 0.5rem;
 min-width: 100%;
+
 `
 
 const Contents = styled.div`
